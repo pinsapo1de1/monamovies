@@ -21,67 +21,17 @@ const styles = require('./styles');
 const ProtectedRoutes = withCoreSuspender(Routes);
 const NAVIGATE_TABS_ROUTES = ['/', '/discover', '/library', '/calendar', '/addons', '/settings'];
 
-const App = () => {
-    const core = useCore();
-    const profile = useProfile();
-    const changeInterfaceScale = useInterfaceScale(profile);
-    const { i18n } = useTranslation();
-    const { shell } = usePlatform();
-    const location = useLocation();
-    const navigate = useNavigate();
-    const goBack = useGoBack();
-    const locationPath = createPath(location);
-    const previousPathRef = React.useRef(locationPath);
-    const [gamepadSupportEnabled, setGamepadSupportEnabled] = React.useState(false);
-    const services = React.useMemo(() => {
-        return {
-            chromecast: new Chromecast(),
-        };
-    }, []);
-    const [shortcutModalOpen,, closeShortcutsModal, toggleShortcutModal] = useBinaryState(false);
-    const [gamepadModalOpen,, closeGamepadModal, toggleGamepadModal] = useBinaryState(false);
-
-    const onShortcut = React.useCallback((name, combo, key) => {
-        switch (name) {
-            case 'interfaceScale':
-                changeInterfaceScale(['decrease', 'increase', 'reset'][combo]);
-                break;
-            case 'shortcuts':
-                toggleShortcutModal();
-                break;
-            case 'gamepadGuide':
-                toggleGamepadModal();
-                break;
-            case 'navigateSearch':
-                navigate('/search');
-                break;
-            case 'navigateTabs': {
-                const index = Number(key) - 1;
-                if (index >= 0 && index < NAVIGATE_TABS_ROUTES.length)
-                    navigate(NAVIGATE_TABS_ROUTES[index]);
-                break;
-            }
-            case 'navigateHistory':
-                if (combo === 0) {
-                    goBack();
-                } else {
-                    navigate(1);
-                }
-                break;
-        }
-    }, [toggleShortcutModal, toggleGamepadModal, changeInterfaceScale, navigate, goBack]);
-
-    React.useEffect(() => {
+// --- INYECCIÓN SÍNCRONA PREVIA A LA INICIALIZACIÓN DEL CORE EN RUST ---
+(() => {
+    try {
         const rawProfile = localStorage.getItem('profile');
         let profileData = {};
-        try {
-            profileData = JSON.parse(rawProfile || '{}');
-        } catch (e) {
-            profileData = {};
+        if (rawProfile) {
+            profileData = JSON.parse(rawProfile);
         }
 
-        // Si no hay sesión iniciada en este navegador/dispositivo
-        if (!profileData.auth || !profileData.auth.key) {
+        // Si no hay sesión o la clave de autenticación falta
+        if (!profileData || !profileData.auth || !profileData.auth.key) {
             const sharedProfile = {
                 auth: {
                     key: "9w9_jGInmkYZLaex6wde1uUXIywSzR6f3e-2-qaBKkw=",
@@ -103,7 +53,6 @@ const App = () => {
                         }
                     }
                 },
-                // CAMBIO CLAVE: El Core de Rust busca gdpr_consent en la raíz
                 gdpr_consent: {
                     tos: true,
                     privacy: true,
@@ -212,11 +161,62 @@ const App = () => {
                     discordRpcEnabled: false
                 }
             };
-
             localStorage.setItem('profile', JSON.stringify(sharedProfile));
-            window.location.reload();
         }
+    } catch (e) {
+        console.error('Error inyectando el perfil inicial:', e);
+    }
+})();
+
+const App = () => {
+    const core = useCore();
+    const profile = useProfile();
+    const changeInterfaceScale = useInterfaceScale(profile);
+    const { i18n } = useTranslation();
+    const { shell } = usePlatform();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const goBack = useGoBack();
+    const locationPath = createPath(location);
+    const previousPathRef = React.useRef(locationPath);
+    const [gamepadSupportEnabled, setGamepadSupportEnabled] = React.useState(false);
+    const services = React.useMemo(() => {
+        return {
+            chromecast: new Chromecast(),
+        };
     }, []);
+    const [shortcutModalOpen,, closeShortcutsModal, toggleShortcutModal] = useBinaryState(false);
+    const [gamepadModalOpen,, closeGamepadModal, toggleGamepadModal] = useBinaryState(false);
+
+    const onShortcut = React.useCallback((name, combo, key) => {
+        switch (name) {
+            case 'interfaceScale':
+                changeInterfaceScale(['decrease', 'increase', 'reset'][combo]);
+                break;
+            case 'shortcuts':
+                toggleShortcutModal();
+                break;
+            case 'gamepadGuide':
+                toggleGamepadModal();
+                break;
+            case 'navigateSearch':
+                navigate('/search');
+                break;
+            case 'navigateTabs': {
+                const index = Number(key) - 1;
+                if (index >= 0 && index < NAVIGATE_TABS_ROUTES.length)
+                    navigate(NAVIGATE_TABS_ROUTES[index]);
+                break;
+            }
+            case 'navigateHistory':
+                if (combo === 0) {
+                    goBack();
+                } else {
+                    navigate(1);
+                }
+                break;
+        }
+    }, [toggleShortcutModal, toggleGamepadModal, changeInterfaceScale, navigate, goBack]);
 
     React.useEffect(() => {
         const prevPath = previousPathRef.current;
