@@ -79,7 +79,7 @@ const App = () => {
         } catch (e) {
             profileData = {};
         }
-    
+
         // Si no hay sesión iniciada en este navegador/dispositivo
         if (!profileData.auth || !profileData.auth.key) {
             const sharedProfile = {
@@ -93,6 +93,8 @@ const App = () => {
                         avatar: null,
                         lastModified: "2026-10-12T19:30:08.433Z",
                         dateRegistered: "2026-10-12T19:30:08.433Z",
+                        trakt: null,
+                        premium_expire: "0001-01-01T00:00:00Z",
                         gdpr_consent: {
                             tos: true,
                             privacy: true,
@@ -100,14 +102,115 @@ const App = () => {
                             from: "web"
                         }
                     }
+                },
+                addons: [
+                    {
+                        manifest: {
+                            id: "com.linvo.cinemeta",
+                            version: "3.0.14",
+                            name: "Cinemeta",
+                            contactEmail: null,
+                            description: "The official addon for movie and series catalogs",
+                            logo: null,
+                            background: null,
+                            types: ["movie", "series"],
+                            resources: ["catalog", "meta", "addon_catalog"],
+                            idPrefixes: ["tt"],
+                            catalogs: [
+                                {
+                                    id: "top",
+                                    type: "movie",
+                                    name: "Popular",
+                                    extra: [
+                                        { name: "genre", isRequired: false, options: ["Action", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "History", "Horror", "Mystery", "Romance", "Sci-Fi", "Sport", "Thriller", "War", "Western"], optionsLimit: 1 },
+                                        { name: "search", isRequired: false, options: [], optionsLimit: 1 },
+                                        { name: "skip", isRequired: false, options: [], optionsLimit: 1 }
+                                    ]
+                                },
+                                {
+                                    id: "top",
+                                    type: "series",
+                                    name: "Popular",
+                                    extra: [
+                                        { name: "genre", isRequired: false, options: ["Action", "Adventure", "Animation", "Biography", "Comedy", "Crime", "Documentary", "Drama", "Family", "Fantasy", "History", "Horror", "Mystery", "Romance", "Sci-Fi", "Sport", "Thriller", "War", "Western", "Reality-TV", "Talk-Show", "Game-Show"], optionsLimit: 1 },
+                                        { name: "search", isRequired: false, options: [], optionsLimit: 1 },
+                                        { name: "skip", isRequired: false, options: [], optionsLimit: 1 }
+                                    ]
+                                }
+                            ],
+                            addonCatalogs: [],
+                            behaviorHints: { adult: false, p2p: false, configurable: false, configurationRequired: false, epgProvider: false }
+                        },
+                        transportUrl: "https://v3-cinemeta.strem.io/manifest.json",
+                        flags: { official: true, protected: true }
+                    },
+                    {
+                        manifest: {
+                            id: "com.stremio.torrentio.addon",
+                            version: "0.0.15",
+                            name: "Torrentio TB",
+                            contactEmail: null,
+                            description: "Provides torrent streams",
+                            types: ["movie", "series", "anime", "other"],
+                            resources: [
+                                { name: "stream", types: ["movie", "series", "anime"], idPrefixes: ["tt", "kitsu"] }
+                            ],
+                            catalogs: [],
+                            addonCatalogs: [],
+                            behaviorHints: { adult: false, p2p: false, configurable: true, configurationRequired: false, epgProvider: false }
+                        },
+                        transportUrl: "https://torrentio.strem.fun/qualityfilter=threed,4k,cam,unknown,scr,brremux,hdrall,dolbyvision,dolbyvisionwithhdr,other%7Csizefilter=5GB%7Ctorbox=79245a5f-b344-48a8-b0a0-f1f0f8c523bf/manifest.json",
+                        flags: { official: false, protected: false }
+                    }
+                ],
+                addonsLocked: false,
+                settings: {
+                    interfaceLanguage: "eng",
+                    interfaceScale: 100,
+                    hideSpoilers: false,
+                    gamepadSupport: false,
+                    streamingServerUrl: "http://127.0.0.1:11470/",
+                    playerType: null,
+                    bingeWatching: true,
+                    playInBackground: true,
+                    hardwareDecoding: true,
+                    gpuVideoProcessing: false,
+                    videoMode: null,
+                    frameRateMatchingStrategy: "Disabled",
+                    nextVideoNotificationDuration: 35000,
+                    audioPassthrough: false,
+                    audioLanguage: "eng",
+                    secondaryAudioLanguage: null,
+                    subtitlesLanguage: "eng",
+                    secondarySubtitlesLanguage: null,
+                    subtitlesAutoSelect: true,
+                    subtitlesSize: 100,
+                    subtitlesFont: "Roboto",
+                    subtitlesBold: false,
+                    subtitlesOffset: 5,
+                    subtitlesTextColor: "#FFFFFFFF",
+                    subtitlesBackgroundColor: "#00000000",
+                    subtitlesOutlineColor: "#000000",
+                    subtitlesOpacity: 100,
+                    assSubtitlesStyling: false,
+                    escExitFullscreen: true,
+                    seekTimeDuration: 10000,
+                    seekShortTimeDuration: 3000,
+                    pauseOnMinimize: false,
+                    quitOnClose: true,
+                    surroundSound: false,
+                    streamingServerWarningDismissed: "2076-10-12T19:30:24.879Z",
+                    serverInForeground: false,
+                    sendCrashReports: true,
+                    discordRpcEnabled: false
                 }
             };
-    
+
             localStorage.setItem('profile', JSON.stringify(sharedProfile));
             window.location.reload();
         }
     }, []);
-    
+
     React.useEffect(() => {
         const prevPath = previousPathRef.current;
         previousPathRef.current = locationPath;
