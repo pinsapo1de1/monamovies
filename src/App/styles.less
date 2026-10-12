@@ -414,23 +414,34 @@ div[class*="update-banner-"] {
     pointer-events: none !important;
 }
 
-/* Separación y alineación limpia en la página de búsqueda */
+/* Protecciones específicas para el área de Búsqueda */
 div[class*="search-page-"],
-div[class*="search-container-"],
-div[class*="search-"] {
+div[class*="search-container-"] {
     
-    /* Contenedor del texto "You Can Search Anything..." */
-    div[class*="label-"],
-    span[class*="label-"],
-    div[class*="title-"] {
+    /* Solo se aplica en la pantalla principal de búsqueda */
+    > div[class*="label-"] {
         display: inline-flex !important;
         align-items: center !important;
-        justify-content: center !important;
-        gap: 0.75rem !important; /* Añade un espacio proporcional entre los tres puntos y MonaMovies */
+        gap: 0.75rem !important;
         
         &::after {
-            margin-left: 0.75rem !important; /* Garantiza el espacio si MonaMovies se genera mediante ::after */
+            margin-left: 0.75rem !important;
             display: inline-block !important;
+        }
+    }
+}
+
+/* Proteger estrictamente los títulos de los episodios */
+div[class*="video-item-"],
+div[class*="episode-"],
+div[class*="meta-details-"] {
+    div[class*="title-"],
+    span[class*="title-"] {
+        font-size: inherit !important;
+        &::after,
+        &::before {
+            content: none !important;
+            display: none !important;
         }
     }
 }
