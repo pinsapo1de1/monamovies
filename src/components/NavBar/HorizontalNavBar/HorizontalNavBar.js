@@ -9,8 +9,8 @@ const { Button, Popup } = require('stremio/components');
 const { useFullscreen } = require('stremio/common/Fullscreen');
 const usePWA = require('stremio/common/usePWA');
 const NavMenuContent = require('../NavMenuContent');
-const Logo = require('./Logo');
-const SearchBar = require('./SearchBar');
+const Logo = require('../Logo');
+const SearchBar = require('../SearchBar');
 const styles = require('./styles');
 
 const HorizontalNavBar = React.memo(React.forwardRef(({ className, selected, search, navMenuOpen, onNavMenuOpenChange }, ref) => {
