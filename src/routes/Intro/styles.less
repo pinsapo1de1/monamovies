@@ -366,20 +366,6 @@ form[class*="login-form"] {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Ocultar las barras de navegación de la app cuando se está en la intro/login */
-:global(.routes-container:has(div[class*="intro-container"])) {
-    :global(nav[class*="vertical-nav-bar"]),
-    :global(nav[class*="horizontal-nav-bar"]) {
-        display: none !important;
-    }
-}
-
-/* Ocultar el botón para cerrar/cancelar el formulario de login */
-button[class*="close-button"],
-div[class*="back-button"] {
-    display: none !important;
-}
-
 /* 1. Ocultar la columna derecha (Facebook, Apple, Sign up) */
 div[class*="intro-container"] form ~ div,
 div[class*="intro-container"] button[class*="facebook"],
