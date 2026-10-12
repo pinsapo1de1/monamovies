@@ -29,3 +29,13 @@
         }
     }
 }
+/* Ocultar el botón General del menú de Ajustes */
+div[data-section="general"] {
+    display: none !important;
+}
+
+/* Ocultar la sección de contenido de General (Usuario, TOS, Trakt, etc.) */
+div[class*="general-container"],
+div[class*="settings-content"] > div:first-child {
+    display: none !important;
+}
