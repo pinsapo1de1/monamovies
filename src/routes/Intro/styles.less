@@ -320,3 +320,54 @@
         }
     }
 }
+/* 1. Ocultar el logo de Stremio */
+div[class*="logo-container-"] {
+    display: none !important;
+}
+
+/* 2. Modificar el título principal a "MonaMovies" */
+div[class*="title-container-"] {
+    font-size: 0 !important; /* Oculta el texto original "Freedom to Stream" */
+    
+    &::after {
+        content: "MonaMovies";
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: #ffffff;
+        display: block;
+        letter-spacing: -1px;
+    }
+}
+
+/* 3. Modificar el eslogan a "Our private online cinema" */
+div[class*="slogan-container-"] {
+    font-size: 0 !important; /* Oculta el texto original "All the video content..." */
+    
+    &::after {
+        content: "Our private online cinema";
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.7);
+        display: block;
+        margin-top: 0.5rem;
+    }
+}
+
+/* 4. Ocultar "Forgot password?" */
+div[class*="form-container-"] a,
+a[class*="forgot-password"] {
+    display: none !important;
+}
+
+/* 5. Ocultar la columna entera de opciones (Facebook, Apple, Sign up) */
+div[class*="options-container-"] {
+    display: none !important;
+}
+
+/* 6. Centrar el formulario de login al haber quitado la columna derecha */
+div[class*="content-container-"] {
+    justify-content: center !important;
+}
+
+div[class*="form-container-"] {
+    margin: 0 auto !important;
+}
