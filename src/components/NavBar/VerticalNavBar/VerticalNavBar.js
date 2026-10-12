@@ -9,24 +9,33 @@ const styles = require('./styles');
 
 const VerticalNavBar = React.memo(React.forwardRef(({ className, selected, tabs }, ref) => {
     const { t } = useTranslation();
+
+    // Filtrar la pestaña del calendario
+    const filteredTabs = React.useMemo(() => {
+        if (!Array.isArray(tabs)) return [];
+        return tabs.filter(tab => {
+            const isCalendar = tab.id === 'calendar' || 
+                               (tab.href && tab.href.includes('calendar')) ||
+                               (tab.label && tab.label.toLowerCase().includes('calendar'));
+            return !isCalendar;
+        });
+    }, [tabs]);
+
     return (
         <nav ref={ref} className={classnames(className, styles['vertical-nav-bar-container'])}>
             {
-                Array.isArray(tabs) ?
-                    tabs.map((tab, index) => (
-                        <NavTabButton
-                            key={index}
-                            className={styles['nav-tab-button']}
-                            selected={tab.id === selected}
-                            href={tab.href}
-                            logo={tab.logo}
-                            icon={tab.icon}
-                            label={t(tab.label)}
-                            onClick={tab.onClick}
-                        />
-                    ))
-                    :
-                    null
+                filteredTabs.map((tab, index) => (
+                    <NavTabButton
+                        key={index}
+                        className={styles['nav-tab-button']}
+                        selected={tab.id === selected}
+                        href={tab.href}
+                        logo={tab.logo}
+                        icon={tab.icon}
+                        label={t(tab.label)}
+                        onClick={tab.onClick}
+                    />
+                ))
             }
         </nav>
     );
