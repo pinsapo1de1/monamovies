@@ -82,28 +82,32 @@
         const errorEl = document.getElementById('pass-error');
     
         try {
-          // Enviamos la clave a la función API en el servidor de Vercel
+          // Enviamos la petición a la API de Vercel con el Content-Type correcto
           const response = await fetch('/api/login', {
             method: 'POST',
-            headers: { 'Content-Type': 'json' },
+            headers: { 
+              'Content-Type': 'application/json' 
+            },
             body: JSON.stringify({ password: passwordInput })
           });
     
           const data = await response.json();
     
           if (response.ok && data.success) {
+            // Guardamos la sesión y ocultamos el overlay de bloqueo
             localStorage.setItem('site_authenticated', 'true');
             document.getElementById('auth-overlay').style.display = 'none';
           } else {
+            errorEl.innerText = "Contraseña incorrecta";
             errorEl.style.display = 'block';
           }
         } catch (err) {
-          errorEl.innerText = "Error al verificar la clave";
+          errorEl.innerText = "Error de conexión con el servidor";
           errorEl.style.display = 'block';
         }
       }
     
-      // Verificar si ya se autenticó en este navegador anteriormente
+      // Si ya nos autenticamos anteriormente en este navegador, ocultamos el bloqueo
       if (localStorage.getItem('site_authenticated') === 'true') {
         document.getElementById('auth-overlay').style.display = 'none';
       }
