@@ -41,32 +41,6 @@ const App = () => {
     const [shortcutModalOpen,, closeShortcutsModal, toggleShortcutModal] = useBinaryState(false);
     const [gamepadModalOpen,, closeGamepadModal, toggleGamepadModal] = useBinaryState(false);
 
-    React.useEffect(() => {
-        // 1. Cargar biblioteca desde Redis al iniciar
-        fetch('/api/library')
-            .then((res) => res.json())
-            .then((data) => {
-                if (data?.storage?.stremio_custom_library) {
-                    localStorage.setItem('stremio_custom_library', JSON.stringify(data.storage.stremio_custom_library));
-                    window.dispatchEvent(new Event('custom_library_updated'));
-                }
-            })
-            .catch((err) => console.error('Error al leer de Redis:', err));
-
-        // 2. Escuchar cambios para guardar en Redis
-        const handleSave = () => {
-            const lib = JSON.parse(localStorage.getItem('stremio_custom_library') || '[]');
-            fetch('/api/library', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ storage: { stremio_custom_library: lib } }),
-            });
-        };
-
-        window.addEventListener('custom_library_updated', handleSave);
-        return () => window.removeEventListener('custom_library_updated', handleSave);
-    }, []);
-
     const onShortcut = React.useCallback((name, combo, key) => {
         switch (name) {
             case 'interfaceScale':
