@@ -300,9 +300,9 @@ nav[class*="horizontal-nav-bar-"] {
     position: relative !important;
     padding: 0 1.5rem !important;
 
-    /* A. Logo "MonaMovies" a la izquierda (RESTRINGIDO SOLO AL HEADER) */
-    nav[class*="horizontal-nav-bar-"] a[class*="logo-"],
-    nav[class*="horizontal-nav-bar-"] div[class*="logo-"] {
+    /* A. Logo "MonaMovies" a la izquierda */
+    a[class*="logo-"],
+    div[class*="logo-"] {
         order: 1 !important;
         font-size: 0 !important;
         text-decoration: none !important;
@@ -431,6 +431,30 @@ div[class*="search-"] {
         &::after {
             margin-left: 0.75rem !important; /* Garantiza el espacio si MonaMovies se genera mediante ::after */
             display: inline-block !important;
+        }
+    }
+}
+
+/* =========================================================
+   DESACTIVAR INYECCIÓN DE TEXTO EN LISTA DE EPISODIOS/VÍDEOS
+   ========================================================= */
+
+/* Garantizar que los títulos de episodios muestren su texto original */
+div[class*="video-item-"],
+div[class*="episode-item-"],
+div[class*="videos-container-"],
+div[class*="episodes-container-"] {
+    
+    div[class*="title-"],
+    div[class*="label-"],
+    span[class*="title-"],
+    span[class*="label-"] {
+        font-size: inherit !important;
+        
+        &::after,
+        &::before {
+            content: none !important;
+            display: none !important;
         }
     }
 }
