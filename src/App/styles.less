@@ -436,21 +436,37 @@ div[class*="search-"] {
 }
 
 /* =========================================================
-   DESACTIVAR INYECCIÓN DE TEXTO EN LISTA DE EPISODIOS/VÍDEOS
+   PROTECCIÓN GLOBAL DE NOTIFICACIONES (TOASTS) Y EPISODIOS
    ========================================================= */
 
-/* Garantizar que los títulos de episodios muestren su texto original */
-div[class*="video-item-"],
-div[class*="episode-item-"],
-div[class*="videos-container-"],
-div[class*="episodes-container-"] {
-    
+/* 1. Proteger notificaciones emergentes (subtítulos cargados, etc.) */
+div[class*="toasts-container-"],
+div[class*="toast-"],
+div[class*="notification-"] {
     div[class*="title-"],
+    div[class*="title-container-"],
     div[class*="label-"],
-    span[class*="title-"],
-    span[class*="label-"] {
+    span[class*="title-"] {
         font-size: inherit !important;
-        
+
+        &::after,
+        &::before {
+            content: none !important;
+            display: none !important;
+        }
+    }
+}
+
+/* 2. Proteger la lista de vídeos y episodios de series */
+div[class*="videos-container-"],
+div[class*="videos-list-"],
+div[class*="video-item-"] {
+    div[class*="title-"],
+    div[class*="title-container-"],
+    div[class*="label-container-"],
+    div[class*="label-"] {
+        font-size: inherit !important;
+
         &::after,
         &::before {
             content: none !important;
