@@ -41,32 +41,39 @@ const App = () => {
     const [shortcutModalOpen,, closeShortcutsModal, toggleShortcutModal] = useBinaryState(false);
     const [gamepadModalOpen,, closeGamepadModal, toggleGamepadModal] = useBinaryState(false);
 
-    // --- Sincronización con Upstash Redis ---
+    // Actualización del handler de sincronización en App.js
     React.useEffect(() => {
-        // 1. Cargar la biblioteca desde Upstash Redis al iniciar
+        const keysToSync = ['stremio_library', 'stremio_streaming', 'stremio_recent'];
+    
+        // 1. Descargar todo el estado desde Redis
         fetch('/api/library')
             .then((res) => res.json())
             .then((data) => {
-                if (data.library && Array.isArray(data.library)) {
-                    const localData = JSON.parse(localStorage.getItem('stremio_library') || '[]');
-                    if (JSON.stringify(localData) !== JSON.stringify(data.library)) {
-                        localStorage.setItem('stremio_library', JSON.stringify(data.library));
-                        window.dispatchEvent(new Event('storage'));
-                    }
+                if (data.storage) {
+                    keysToSync.forEach((key) => {
+                        if (data.storage[key]) {
+                            localStorage.setItem(key, JSON.stringify(data.storage[key]));
+                        }
+                    });
+                    window.dispatchEvent(new Event('storage'));
                 }
             })
             .catch((err) => console.error('Error al sincronizar desde Redis:', err));
-
-        // 2. Escuchar cambios locales para guardarlos en Redis
+    
+        // 2. Subir cambios locales completos a Redis
         const handleSyncToRedis = () => {
-            const currentLibrary = JSON.parse(localStorage.getItem('stremio_library') || '[]');
+            const payload = {};
+            keysToSync.forEach((key) => {
+                payload[key] = JSON.parse(localStorage.getItem(key) || 'null');
+            });
+    
             fetch('/api/library', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ library: currentLibrary }),
+                body: JSON.stringify({ storage: payload }),
             }).catch((err) => console.error('Error al subir a Redis:', err));
         };
-
+    
         window.addEventListener('storage', handleSyncToRedis);
         return () => window.removeEventListener('storage', handleSyncToRedis);
     }, []);
