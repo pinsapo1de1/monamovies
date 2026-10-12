@@ -43,59 +43,49 @@ const App = () => {
 
     // --- Sincronización transparente con Upstash Redis ---
     React.useEffect(() => {
-        const keysToSync = ['stremio_library', 'stremio_streaming', 'stremio_recent'];
+        // Interceptar la escritura local para subir a Redis en tiempo real
+        const originalSetItem = localStorage.setItem;
+        localStorage.setItem = function(key, value) {
+            originalSetItem.apply(this, arguments);
+            if (key.startsWith('stremio') || key.includes('library') || key.includes('profile')) {
+                // Recoger todo el estado local de Stremio
+                const fullStorage = {};
+                for (let i = 0; i < localStorage.length; i++) {
+                    const k = localStorage.key(i);
+                    if (k.startsWith('stremio') || k.includes('library') || k.includes('profile')) {
+                        fullStorage[k] = localStorage.getItem(k);
+                    }
+                }
+                fetch('/api/library', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ storage: fullStorage }),
+                }).catch((err) => console.error('Error al guardar en Redis:', err));
+            }
+        };
 
-        // Cargar datos de Upstash Redis de forma prioritaria
+        // Al iniciar la app (e.g. en incógnito), descargar los datos guardados en Redis
         fetch('/api/library')
             .then((res) => res.json())
             .then((data) => {
-                if (data.storage) {
-                    let updatedAny = false;
-                    keysToSync.forEach((key) => {
-                        if (data.storage[key]) {
-                            const localVal = localStorage.getItem(key);
-                            const remoteVal = JSON.stringify(data.storage[key]);
-                            if (localVal !== remoteVal) {
-                                localStorage.setItem(key, remoteVal);
-                                updatedAny = true;
-                            }
+                if (data.storage && Object.keys(data.storage).length > 0) {
+                    let shouldReload = false;
+                    Object.keys(data.storage).forEach((k) => {
+                        if (localStorage.getItem(k) !== data.storage[k]) {
+                            originalSetItem.call(localStorage, k, data.storage[k]);
+                            shouldReload = true;
                         }
                     });
-
-                    // Si actualizamos datos en un localStorage vacío (como Incógnito),
-                    // notificamos al Core de Stremio o recargamos la vista para que cargue la lista
-                    if (updatedAny) {
-                        try {
-                            core.transport.dispatch({
-                                action: 'Ctx',
-                                args: { action: 'SyncLibraryWithAPI' }
-                            });
-                        } catch (e) {
-                            // Fallback si el Core no responde de inmediato
-                            window.location.reload();
-                        }
+                    // Si estábamos en una sesión limpia (como incógnito) y se inyectaron datos nuevos,
+                    // recargamos suavemente para que el Core de Stremio lea la biblioteca inyectada.
+                    if (shouldReload && !window.location.hash.includes('reloaded')) {
+                        window.location.hash = window.location.hash + '?reloaded=true';
+                        window.location.reload();
                     }
                 }
             })
-            .catch((err) => console.error('Error al sincronizar desde Redis:', err));
-
-        // Guardar cambios locales en Redis cuando el usuario agregue/quite elementos
-        const handleSyncToRedis = () => {
-            const payload = {};
-            keysToSync.forEach((key) => {
-                payload[key] = JSON.parse(localStorage.getItem(key) || 'null');
-            });
-
-            fetch('/api/library', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ storage: payload }),
-            }).catch((err) => console.error('Error al subir a Redis:', err));
-        };
-
-        window.addEventListener('storage', handleSyncToRedis);
-        return () => window.removeEventListener('storage', handleSyncToRedis);
-    }, [core.transport]);
+            .catch((err) => console.error('Error al recuperar desde Redis:', err));
+    }, []);
 
     const onShortcut = React.useCallback((name, combo, key) => {
         switch (name) {
