@@ -67,6 +67,33 @@
     <%= htmlWebpackPlugin.tags.bodyTags %>
     <script src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
     <script async src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+
+           <!-- Modal de Bloqueo por Contraseña -->
+    <div id="auth-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#141414; z-index:999999; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+      <h2 style="color:#e50914; font-family:sans-serif; margin-bottom:20px;">Acceso Privado</h2>
+      <input type="password" id="site-pass" placeholder="Introduce la clave secreta" style="padding:12px; border-radius:4px; border:none; width:250px; text-align:center; font-size:16px;">
+      <button onclick="unlockSite()" style="margin-top:15px; padding:10px 25px; background:#e50914; color:white; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">Entrar</button>
+      <p id="pass-error" style="color:red; display:none; margin-top:10px;">Clave incorrecta</p>
+    </div>
+    
+    <script>
+      const SECRET_KEY = "princesa";
+    
+      function unlockSite() {
+        const input = document.getElementById('site-pass').value;
+        if (input === SECRET_KEY) {
+          localStorage.setItem('site_authenticated', 'true');
+          document.getElementById('auth-overlay').style.display = 'none';
+        } else {
+          document.getElementById('pass-error').style.display = 'block';
+        }
+      }
+    
+      // Verificar si ya se introdujo la clave previamente en este navegador
+      if (localStorage.getItem('site_authenticated') === 'true') {
+        document.getElementById('auth-overlay').style.display = 'none';
+      }
+    </script>   
 </body>
 
 </html>
