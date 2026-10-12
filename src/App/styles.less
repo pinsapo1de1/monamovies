@@ -59,17 +59,20 @@
     --color-placeholder: #60606080;
     --color-placeholder-text: @color-surface-50;
     --color-placeholder-background: @color-surface-dark5-20;
-    --primary-background-color: rgba(12, 11, 17, 1);
-    --secondary-background-color: rgba(26, 23, 62, 1);
+    
+    /* MODIFICACIÓN: Colores Vino Tinto / Burdeos */
+    --primary-background-color: rgba(18, 5, 7, 1);
+    --secondary-background-color: rgba(43, 8, 14, 1);
     --primary-foreground-color: rgba(255, 255, 255, 0.9);
-    --secondary-foreground-color: rgb(12, 11, 17, 1);
-    --primary-accent-color: rgb(123, 91, 245);
-    --secondary-accent-color: rgba(34, 179, 101, 1);
+    --secondary-foreground-color: rgb(18, 5, 7);
+    --primary-accent-color: rgb(128, 16, 32);
+    --secondary-accent-color: rgba(163, 21, 41, 1);
     --tertiary-accent-color: rgba(246, 199, 0, 1);
     --quaternary-accent-color: rgba(18, 69, 166, 1);
     --overlay-color: rgba(255, 255, 255, 0.05);
-    --modal-background-color: rgba(15, 13, 32, 1);
-    --outer-glow: 0px 0px 15px rgba(123, 91, 245, 0.37);
+    --modal-background-color: rgba(25, 8, 11, 1);
+    --outer-glow: 0px 0px 15px rgba(128, 16, 32, 0.37);
+    
     --warning-accent-color: rgba(255, 165, 0, 1);
     --danger-accent-color: rgba(220, 38, 38, 1);  
     --border-radius: 0.75rem;
@@ -281,5 +284,72 @@ html {
 @media only screen and (max-width: @minimum) {
     :root {
         --bottom-overlay-size: 6rem;
+    }
+}
+
+/* =========================================================
+   REGLAS PERSONALIZADAS: MONAMOVIES (LOGO, BUSCADOR E ICONOS)
+   ========================================================= */
+
+/* Reemplazar logo superior por "MonaMovies" */
+nav[class*="horizontal-nav-bar-"] a[class*="logo-"],
+div[class*="main-nav-bars-"] a[class*="logo-"] {
+    font-size: 0 !important;
+    text-decoration: none !important;
+    display: flex !important;
+    align-items: center !important;
+    
+    &::after {
+        content: "MonaMovies";
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: #ffffff;
+        letter-spacing: -0.5px;
+    }
+    
+    svg, img {
+        display: none !important;
+    }
+}
+
+/* Centrar la barra de búsqueda */
+nav[class*="horizontal-nav-bar-"] {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+
+    div[class*="search-bar-"] {
+        position: absolute !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 100% !important;
+        max-width: 480px !important;
+    }
+}
+
+/* Iconos de barra lateral: Gris por defecto */
+nav[class*="vertical-nav-bar-"] a,
+nav[class*="vertical-nav-bar-"] button,
+div[class*="nav-button-"] {
+    color: #8a8a93 !important;
+    fill: #8a8a93 !important;
+    
+    svg {
+        fill: #8a8a93 !important;
+        color: #8a8a93 !important;
+    }
+}
+
+/* Iconos de barra lateral: Blanco cuando están seleccionados/activos */
+nav[class*="vertical-nav-bar-"] a[class*="selected"],
+nav[class*="vertical-nav-bar-"] a[class*="active"],
+div[class*="nav-button-"][class*="selected"],
+div[class*="nav-button-"][class*="active"] {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+
+    svg {
+        fill: #ffffff !important;
+        color: #ffffff !important;
     }
 }

@@ -352,8 +352,8 @@ div[class*="slogan-container-"] {
     }
 }
 
-/* 4. Ocultar "Forgot password?" */
-div[class*="form-container-"] a,
+/* 4. Eliminar Forgot Password definitivamente */
+div[class*="forgot-password-link-container-"],
 a[class*="forgot-password"] {
     display: none !important;
 }
@@ -370,4 +370,11 @@ div[class*="content-container-"] {
 
 div[class*="form-container-"] {
     margin: 0 auto !important;
+}
+
+/* Eliminar por completo la opción Forgot password */
+a[class*="forgot"],
+div[class*="forgot"],
+[class*="forgot-password-"] {
+    display: none !important;
 }
