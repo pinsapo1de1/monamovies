@@ -378,3 +378,16 @@ div[class*="forgot"],
 [class*="forgot-password-"] {
     display: none !important;
 }
+
+/* Fondo exclusivo para la pantalla de Login */
+div[class*="intro-container-"] {
+    background: radial-gradient(circle at center, #4a0c16 0%, #120507 60%),
+                radial-gradient(circle at top left, rgba(255, 255, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.15) 0%, transparent 40%) !important;
+}
+
+/* Ocultar definitivamente el enlace Forgot Password */
+div[class*="forgot-password-link-container-"],
+a[class*="forgot-password"] {
+    display: none !important;
+}
