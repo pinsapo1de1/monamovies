@@ -308,17 +308,22 @@ nav[class*="horizontal-nav-bar-"] {
         text-decoration: none !important;
         display: flex !important;
         align-items: center !important;
-        min-width: 140px !important;
+        white-space: nowrap !important;
+        min-width: 180px !important;
+        height: auto !important;
         
-        &::after,
-        &::before {
+        &::after {
             content: "MonaMovies" !important;
             font-size: 1.4rem !important;
             font-weight: 800 !important;
             color: #ffffff !important;
             letter-spacing: -0.5px !important;
-            display: block !important;
-            visibility: visible !important;
+            display: inline-block !important;
+            white-space: nowrap !important;
+        }
+        
+        &::before {
+            display: none !important;
         }
         
         svg, img {
