@@ -301,19 +301,24 @@ nav[class*="horizontal-nav-bar-"] {
     padding: 0 1.5rem !important;
 
     /* A. Logo "MonaMovies" a la izquierda */
-    a[class*="logo-"] {
+    a[class*="logo-"],
+    div[class*="logo-"] {
         order: 1 !important;
         font-size: 0 !important;
         text-decoration: none !important;
         display: flex !important;
         align-items: center !important;
+        min-width: 140px !important;
         
-        &::after {
-            content: "MonaMovies";
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: #ffffff;
-            letter-spacing: -0.5px;
+        &::after,
+        &::before {
+            content: "MonaMovies" !important;
+            font-size: 1.4rem !important;
+            font-weight: 800 !important;
+            color: #ffffff !important;
+            letter-spacing: -0.5px !important;
+            display: block !important;
+            visibility: visible !important;
         }
         
         svg, img {
@@ -390,4 +395,16 @@ div[class*="nav-button-"][class*="active"] {
         fill: #ffffff !important;
         color: #ffffff !important;
     }
+}
+
+/* 5. Filtros / Categorías seleccionadas (Last Watched, A-Z, Watched, etc.) en #a31529 */
+div[class*="chip-"][class*="selected"],
+div[class*="chip-"][class*="active"],
+button[class*="chip-"][class*="selected"],
+button[class*="chip-"][class*="active"],
+div[class*="selectable-inputs-container"] [class*="selected"],
+div[class*="selectable-inputs-container"] [class*="active"] {
+    background-color: #a31529 !important;
+    color: #ffffff !important;
+    border-color: #a31529 !important;
 }
