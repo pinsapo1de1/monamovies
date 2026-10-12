@@ -320,3 +320,48 @@
         }
     }
 }
+
+/* 1. Ocultar el logo de Stremio, botones sociales, registro y contraseña olvidada */
+div[class*="logo-container"],
+button[class*="facebook"],
+button[class*="apple"],
+a[class*="forgot-password"],
+button[class*="signup"],
+div[class*="buttons-container"] > *:not(form) {
+    display: none !important;
+}
+
+/* 2. Ocultar el eslogan original "Freedom to Stream" */
+div[class*="title-container"],
+div[class*="subtitle-container"] {
+    display: none !important;
+}
+
+/* 3. Insertar el título "MonaMovies" sobre el formulario */
+form[class*="login-form"]::before {
+    content: "MonaMovies";
+    display: block;
+    font-size: 3rem;
+    font-weight: 800;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 2rem;
+    letter-spacing: -1px;
+}
+
+/* 4. Centrar y estilizar la caja de login para un diseño limpio */
+div[class*="intro-container"] {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+form[class*="login-form"] {
+    width: 100% !important;
+    max-width: 400px !important;
+    background: rgba(18, 18, 26, 0.8) !important;
+    padding: 2.5rem !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5) !important;
+}
