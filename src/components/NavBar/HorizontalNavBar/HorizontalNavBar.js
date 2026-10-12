@@ -12,7 +12,7 @@ const Logo = require('./Logo');
 const SearchBar = require('./SearchBar');
 const styles = require('./styles');
 
-const HorizontalNavBar = React.memo(React.forwardRef(({ className, selected, search, ...props }, ref) => {
+const HorizontalNavBar = React.memo(React.forwardRef(({ className, selected, search }, ref) => {
     const { t } = useTranslation();
     const [fullscreen, requestFullscreen, exitFullscreen, , supported] = useFullscreen();
     const [, isAndroidPWA] = usePWA();
