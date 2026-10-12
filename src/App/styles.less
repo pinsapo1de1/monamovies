@@ -413,3 +413,24 @@ div[class*="update-banner-"] {
     opacity: 0 !important;
     pointer-events: none !important;
 }
+
+/* Separación y alineación limpia en la página de búsqueda */
+div[class*="search-page-"],
+div[class*="search-container-"],
+div[class*="search-"] {
+    
+    /* Contenedor del texto "You Can Search Anything..." */
+    div[class*="label-"],
+    span[class*="label-"],
+    div[class*="title-"] {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.75rem !important; /* Añade un espacio proporcional entre los tres puntos y MonaMovies */
+        
+        &::after {
+            margin-left: 0.75rem !important; /* Garantiza el espacio si MonaMovies se genera mediante ::after */
+            display: inline-block !important;
+        }
+    }
+}
