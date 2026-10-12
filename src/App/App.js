@@ -92,7 +92,13 @@ const App = () => {
                         appleId: null,
                         avatar: null,
                         lastModified: "2026-10-12T19:30:08.433Z",
-                        dateRegistered: "2026-10-12T19:30:08.433Z"
+                        dateRegistered: "2026-10-12T19:30:08.433Z",
+                        gdpr_consent: {
+                            tos: true,
+                            privacy: true,
+                            marketing: false,
+                            from: "web"
+                        }
                     }
                 }
             };
