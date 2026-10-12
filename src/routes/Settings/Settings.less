@@ -29,13 +29,12 @@
         }
     }
 }
-/* Ocultar el botón General del menú de Ajustes */
-div[data-section="general"] {
+/* 1. Ocultar el botón 'General' en el menú de la izquierda */
+div[class*="menu-"] > div:first-child {
     display: none !important;
 }
 
-/* Ocultar la sección de contenido de General (Usuario, TOS, Trakt, etc.) */
-div[class*="general-container"],
-div[class*="settings-content"] > div:first-child {
+/* 2. Ocultar la primera sección de contenido (Avatar, Login, Trakt, Enlaces) */
+div[class*="sections-container-"] > div:first-child {
     display: none !important;
 }
