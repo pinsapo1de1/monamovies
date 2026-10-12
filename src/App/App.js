@@ -72,25 +72,33 @@ const App = () => {
     }, [toggleShortcutModal, toggleGamepadModal, changeInterfaceScale, navigate, goBack]);
 
     React.useEffect(() => {
-        const SHARED_AUTH_KEY = "Princesa190395*"; // Pega tu authKey entre las comillas
+        const rawProfile = localStorage.getItem('profile');
+        let profileData = {};
+        try {
+            profileData = JSON.parse(rawProfile || '{}');
+        } catch (e) {
+            profileData = {};
+        }
     
-        const profileData = JSON.parse(localStorage.getItem('profile') || '{}');
-    
-        // Si el usuario abre la web en incógnito o PC nuevo (no está autenticado)
+        // Si no hay sesión iniciada en este navegador/dispositivo
         if (!profileData.auth || !profileData.auth.key) {
-            const authenticatedProfile = {
-                ...profileData,
+            const sharedProfile = {
                 auth: {
-                    key: SHARED_AUTH_KEY,
+                    key: "9w9_jGInmkYZLaex6wde1uUXIywSzR6f3e-2-qaBKkw=",
                     user: {
-                        id: "shared_user",
-                        email: "jaurelionoguerolh@gmail.com"
+                        _id: "6acd3540cd696551c7045c08",
+                        email: "jaurelionoguerolh@gmail.com",
+                        fbId: null,
+                        appleId: null,
+                        avatar: null,
+                        lastModified: "2026-10-12T19:30:08.433Z",
+                        dateRegistered: "2026-10-12T19:30:08.433Z"
                     }
                 }
             };
     
-            localStorage.setItem('profile', JSON.stringify(authenticatedProfile));
-            window.location.reload(); // Recarga una única vez para inicializar el Core logueado
+            localStorage.setItem('profile', JSON.stringify(sharedProfile));
+            window.location.reload();
         }
     }, []);
     
