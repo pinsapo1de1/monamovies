@@ -7,7 +7,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Stremio">
+    <meta name="apple-mobile-web-app-title" content="MonaMovies">
     <meta name="theme-color" content="#2a2843">
     <link rel="icon" type="image/x-icon" href="<%= htmlWebpackPlugin.options.faviconsPath %>/favicon.ico">
     <link rel="apple-touch-icon" href="<%= htmlWebpackPlugin.options.imagesPath %>/icon_196x196.png">
@@ -67,51 +67,6 @@
     <%= htmlWebpackPlugin.tags.bodyTags %>
     <script src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
     <script async src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
-        
-    <!-- Modal de Bloqueo por Contraseña Segura -->
-    <div id="auth-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#141414; z-index:999999; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-      <h2 style="color:#e50914; font-family:sans-serif; margin-bottom:20px;">Acceso Privado</h2>
-      <input type="password" id="site-pass" placeholder="Introduce la clave secreta" style="padding:12px; border-radius:4px; border:none; width:250px; text-align:center; font-size:16px;">
-      <button onclick="checkPassword()" style="margin-top:15px; padding:10px 25px; background:#e50914; color:white; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">Entrar</button>
-      <p id="pass-error" style="color:red; display:none; margin-top:10px;">Clave incorrecta</p>
-    </div>
-    
-    <script>
-      async function checkPassword() {
-        const passwordInput = document.getElementById('site-pass').value;
-        const errorEl = document.getElementById('pass-error');
-    
-        try {
-          // Enviamos la petición a la API de Vercel con el Content-Type correcto
-          const response = await fetch('/api/login', {
-            method: 'POST',
-            headers: { 
-              'Content-Type': 'application/json' 
-            },
-            body: JSON.stringify({ password: passwordInput })
-          });
-    
-          const data = await response.json();
-    
-          if (response.ok && data.success) {
-            // Guardamos la sesión y ocultamos el overlay de bloqueo
-            localStorage.setItem('site_authenticated', 'true');
-            document.getElementById('auth-overlay').style.display = 'none';
-          } else {
-            errorEl.innerText = "Contraseña incorrecta";
-            errorEl.style.display = 'block';
-          }
-        } catch (err) {
-          errorEl.innerText = "Error de conexión con el servidor";
-          errorEl.style.display = 'block';
-        }
-      }
-    
-      // Si ya nos autenticamos anteriormente en este navegador, ocultamos el bloqueo
-      if (localStorage.getItem('site_authenticated') === 'true') {
-        document.getElementById('auth-overlay').style.display = 'none';
-      }
-    </script>
 </body>
 
 </html>
