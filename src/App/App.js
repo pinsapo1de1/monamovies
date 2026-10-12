@@ -41,45 +41,31 @@ const App = () => {
     const [shortcutModalOpen,, closeShortcutsModal, toggleShortcutModal] = useBinaryState(false);
     const [gamepadModalOpen,, closeGamepadModal, toggleGamepadModal] = useBinaryState(false);
 
-    // --- SISTEMA DE SINCRONIZACIÓN E INYECCIÓN CON UPSTASH REDIS ---
     React.useEffect(() => {
-        const loadFromRedis = async () => {
-            try {
-                const res = await fetch('/api/library');
-                const data = await res.json();
-                
-                if (data && data.storage) {
-                    // 1. Guardar el objeto tal cual viene de Redis
-                    Object.keys(data.storage).forEach((key) => {
-                        const val = typeof data.storage[key] === 'object' 
-                            ? JSON.stringify(data.storage[key]) 
-                            : data.storage[key];
-                        localStorage.setItem(key, val);
-                    });
-
-                    // 2. Si existe stremio_custom_library, inyectarla en la clave nativa stremio_library
-                    if (data.storage.stremio_custom_library) {
-                        const customLib = data.storage.stremio_custom_library;
-                        localStorage.setItem('stremio_library', JSON.stringify(customLib));
-
-                        // Notificar al Core de Stremio que el almacenamiento ha cambiado
-                        try {
-                            core.transport.dispatch({
-                                action: 'Ctx',
-                                args: { action: 'SyncLibraryWithAPI' }
-                            });
-                        } catch (e) {
-                            console.error('Error enviando SyncLibraryWithAPI:', e);
-                        }
-                    }
+        // 1. Cargar biblioteca desde Redis al iniciar
+        fetch('/api/library')
+            .then((res) => res.json())
+            .then((data) => {
+                if (data?.storage?.stremio_custom_library) {
+                    localStorage.setItem('stremio_custom_library', JSON.stringify(data.storage.stremio_custom_library));
+                    window.dispatchEvent(new Event('custom_library_updated'));
                 }
-            } catch (err) {
-                console.error('Error cargando desde Redis:', err);
-            }
+            })
+            .catch((err) => console.error('Error al leer de Redis:', err));
+
+        // 2. Escuchar cambios para guardar en Redis
+        const handleSave = () => {
+            const lib = JSON.parse(localStorage.getItem('stremio_custom_library') || '[]');
+            fetch('/api/library', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ storage: { stremio_custom_library: lib } }),
+            });
         };
 
-        loadFromRedis();
-    }, [core.transport]);
+        window.addEventListener('custom_library_updated', handleSave);
+        return () => window.removeEventListener('custom_library_updated', handleSave);
+    }, []);
 
     const onShortcut = React.useCallback((name, combo, key) => {
         switch (name) {
