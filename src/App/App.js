@@ -41,6 +41,36 @@ const App = () => {
     const [shortcutModalOpen,, closeShortcutsModal, toggleShortcutModal] = useBinaryState(false);
     const [gamepadModalOpen,, closeGamepadModal, toggleGamepadModal] = useBinaryState(false);
 
+    // --- Sincronización con Upstash Redis ---
+    React.useEffect(() => {
+        // 1. Cargar la biblioteca desde Upstash Redis al iniciar
+        fetch('/api/library')
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.library && Array.isArray(data.library)) {
+                    const localData = JSON.parse(localStorage.getItem('stremio_library') || '[]');
+                    if (JSON.stringify(localData) !== JSON.stringify(data.library)) {
+                        localStorage.setItem('stremio_library', JSON.stringify(data.library));
+                        window.dispatchEvent(new Event('storage'));
+                    }
+                }
+            })
+            .catch((err) => console.error('Error al sincronizar desde Redis:', err));
+
+        // 2. Escuchar cambios locales para guardarlos en Redis
+        const handleSyncToRedis = () => {
+            const currentLibrary = JSON.parse(localStorage.getItem('stremio_library') || '[]');
+            fetch('/api/library', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ library: currentLibrary }),
+            }).catch((err) => console.error('Error al subir a Redis:', err));
+        };
+
+        window.addEventListener('storage', handleSyncToRedis);
+        return () => window.removeEventListener('storage', handleSyncToRedis);
+    }, []);
+
     const onShortcut = React.useCallback((name, combo, key) => {
         switch (name) {
             case 'interfaceScale':
