@@ -474,3 +474,30 @@ div[class*="video-item-"] {
         }
     }
 }
+
+/* =========================================================
+   RESTAURAR TÍTULOS DE CATEGORÍAS Y CATALOGOS (BLANCO)
+   ========================================================= */
+
+/* Títulos de sección (Popular - Movie, Popular - Series, Featured, etc.) */
+div[class*="catalog-"] div[class*="title-"],
+div[class*="catalogs-"] div[class*="title-"],
+div[class*="catalog-header-"],
+div[class*="catalogs-container-"] div[class*="title-"],
+div[class*="board-"] div[class*="title-"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #ffffff !important;
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 1rem !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+
+    /* Asegurar que el texto nativo se renderice sin que ningún pseudo-elemento lo tape */
+    &::after,
+    &::before {
+        content: normal !important;
+        display: inline !important;
+    }
+}
