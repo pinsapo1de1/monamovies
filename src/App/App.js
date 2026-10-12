@@ -41,51 +41,70 @@ const App = () => {
     const [shortcutModalOpen,, closeShortcutsModal, toggleShortcutModal] = useBinaryState(false);
     const [gamepadModalOpen,, closeGamepadModal, toggleGamepadModal] = useBinaryState(false);
 
-    // --- Sincronización transparente con Upstash Redis ---
+    // --- Gestión personalizada de la Biblioteca con Upstash Redis ---
     React.useEffect(() => {
-        // Interceptar la escritura local para subir a Redis en tiempo real
-        const originalSetItem = localStorage.setItem;
-        localStorage.setItem = function(key, value) {
-            originalSetItem.apply(this, arguments);
-            if (key.startsWith('stremio') || key.includes('library') || key.includes('profile')) {
-                // Recoger todo el estado local de Stremio
-                const fullStorage = {};
-                for (let i = 0; i < localStorage.length; i++) {
-                    const k = localStorage.key(i);
-                    if (k.startsWith('stremio') || k.includes('library') || k.includes('profile')) {
-                        fullStorage[k] = localStorage.getItem(k);
-                    }
-                }
-                fetch('/api/library', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ storage: fullStorage }),
-                }).catch((err) => console.error('Error al guardar en Redis:', err));
-            }
-        };
-
-        // Al iniciar la app (e.g. en incógnito), descargar los datos guardados en Redis
+        // 1. Cargar biblioteca guardada desde Redis al iniciar
         fetch('/api/library')
             .then((res) => res.json())
             .then((data) => {
-                if (data.storage && Object.keys(data.storage).length > 0) {
-                    let shouldReload = false;
-                    Object.keys(data.storage).forEach((k) => {
-                        if (localStorage.getItem(k) !== data.storage[k]) {
-                            originalSetItem.call(localStorage, k, data.storage[k]);
-                            shouldReload = true;
+                if (data.storage && data.storage.stremio_custom_library) {
+                    const remoteLib = data.storage.stremio_custom_library;
+                    localStorage.setItem('stremio_custom_library', JSON.stringify(remoteLib));
+                    
+                    // Forzar al Core de Stremio a cargar estos ítems
+                    remoteLib.forEach((item) => {
+                        try {
+                            core.transport.dispatch({
+                                action: 'Ctx',
+                                args: {
+                                    action: 'AddToLibrary',
+                                    args: [item]
+                                }
+                            });
+                        } catch (e) {
+                            console.error('Error al inyectar ítem en Core:', e);
                         }
                     });
-                    // Si estábamos en una sesión limpia (como incógnito) y se inyectaron datos nuevos,
-                    // recargamos suavemente para que el Core de Stremio lea la biblioteca inyectada.
-                    if (shouldReload && !window.location.hash.includes('reloaded')) {
-                        window.location.hash = window.location.hash + '?reloaded=true';
-                        window.location.reload();
-                    }
                 }
             })
-            .catch((err) => console.error('Error al recuperar desde Redis:', err));
-    }, []);
+            .catch((err) => console.error('Error al descargar biblioteca de Redis:', err));
+
+        // 2. Interceptar cuando el usuario añade o quita algo de la biblioteca
+        const originalDispatch = core.transport.dispatch;
+        core.transport.dispatch = function(actionObj) {
+            // Ejecutar la acción original en Stremio
+            originalDispatch.apply(this, arguments);
+
+            // Si la acción es modificar la biblioteca o marcar como visto
+            if (actionObj && actionObj.action === 'Ctx' && actionObj.args) {
+                const innerAction = actionObj.args.action;
+                if (innerAction === 'AddToLibrary' || innerAction === 'RemoveFromLibrary' || innerAction === 'ToggleItemOnLibrary') {
+                    setTimeout(() => {
+                        // Obtener el estado actual y guardarlo en LocalStorage y Redis
+                        let currentLib = JSON.parse(localStorage.getItem('stremio_custom_library') || '[]');
+                        const itemData = actionObj.args.args;
+
+                        if (innerAction === 'AddToLibrary' && itemData) {
+                            currentLib.push(itemData);
+                        } else if (innerAction === 'RemoveFromLibrary' && itemData) {
+                            currentLib = currentLib.filter((i) => i.id !== itemData.id && i._id !== itemData._id);
+                        }
+
+                        localStorage.setItem('stremio_custom_library', JSON.stringify(currentLib));
+
+                        // Subir a Upstash Redis
+                        fetch('/api/library', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                storage: { stremio_custom_library: currentLib }
+                            }),
+                        }).catch((err) => console.error('Error al subir a Redis:', err));
+                    }, 300);
+                }
+            }
+        };
+    }, [core.transport]);
 
     const onShortcut = React.useCallback((name, combo, key) => {
         switch (name) {
