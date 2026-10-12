@@ -71,6 +71,15 @@ const App = () => {
         }
     }, [toggleShortcutModal, toggleGamepadModal, changeInterfaceScale, navigate, goBack]);
 
+       // Redirigir a login si no hay sesión activa
+    React.useEffect(() => {
+        if (!profile.auth || !profile.auth.key) {
+            if (!location.pathname.startsWith('/intro')) {
+                navigate('/intro?form=login', { replace: true });
+            }
+        }
+    }, [profile.auth, location.pathname, navigate]);
+   
     React.useEffect(() => {
         const prevPath = previousPathRef.current;
         previousPathRef.current = locationPath;
