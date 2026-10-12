@@ -10,6 +10,7 @@ const NotFound = require('stremio/routes/NotFound');
 const { useProfile, useNotifications, useOnScrollToBottom, withCoreSuspender } = require('stremio/common');
 const { default: toPath } = require('stremio-router/toPath');
 const { DelayedRenderer, Chips, Image, MainNavBars, LibItem, MultiselectMenu } = require('stremio/components');
+const { default: Placeholder } = require('./Placeholder');
 const useLibrary = require('./useLibrary');
 const useSelectableInputs = require('./useSelectableInputs');
 const styles = require('./styles');
@@ -53,82 +54,72 @@ const Library = ({ model }) => {
     const [library, loadNextPage] = useLibrary(model, urlParams, queryParams);
     const [typeSelect, sortChips, hasNextPage] = useSelectableInputs(library);
     const scrollContainerRef = React.useRef(null);
-
-    // --- LEER DIRECTAMENTE DESDE REDIS / LOCALSTORAGE ---
-    const [customCatalog, setCustomCatalog] = React.useState(() => {
-        return JSON.parse(localStorage.getItem('stremio_custom_library') || '[]');
-    });
-
-    React.useEffect(() => {
-        const updateLocal = () => {
-            setCustomCatalog(JSON.parse(localStorage.getItem('stremio_custom_library') || '[]'));
-        };
-        window.addEventListener('custom_library_updated', updateLocal);
-        window.addEventListener('storage', updateLocal);
-        return () => {
-            window.removeEventListener('custom_library_updated', updateLocal);
-            window.removeEventListener('storage', updateLocal);
-        };
-    }, []);
-
-    // Determinar qué catálogo mostrar: si el Core devuelve elementos los usa; si no, usa Redis
-    const displayCatalog = (library?.catalog && library.catalog.length > 0)
-        ? library.catalog
-        : customCatalog;
-
     const onScrollToBottom = React.useCallback(() => {
         if (hasNextPage) {
             loadNextPage();
         }
     }, [hasNextPage, loadNextPage]);
-
     const onScroll = useOnScrollToBottom(onScrollToBottom, SCROLL_TO_BOTTOM_TRESHOLD);
-
     React.useLayoutEffect(() => {
         if (scrollContainerRef.current !== null && library.selected && library.selected.request.page === 1 && library.catalog.length !== 0) {
             scrollContainerRef.current.scrollTop = 0;
         }
     }, [profile.auth, library.selected]);
-
     React.useEffect(() => {
         if (!library.selected?.type && typeSelect.value) {
             navigate(toPath(typeSelect.value));
         }
     }, [typeSelect.value, library.selected]);
-
     return (
         <MainNavBars className={styles['library-container']} route={model}>
-            <div className={styles['library-content']}>
-                <div className={styles['selectable-inputs-container']}>
-                    <MultiselectMenu {...typeSelect} className={styles['select-input-container']} />
-                    <Chips {...sortChips} className={styles['select-input-container']} />
-                </div>
-                {
-                    displayCatalog.length === 0 ?
-                        <div className={styles['message-container']}>
-                            <Image
-                                className={styles['image']}
-                                src={require('/assets/images/empty.png')}
-                                alt={' '}
-                            />
-                            <div className={styles['message-label']}>{model === 'library' ? t('LIBRARY_EMPTY') : t('BOARD_CONTINUE_WATCHING_EMPTY')}</div>
+            {
+                profile.auth !== null ?
+                    <div className={styles['library-content']}>
+                        <div className={styles['selectable-inputs-container']}>
+                            <MultiselectMenu {...typeSelect} className={styles['select-input-container']} />
+                            <Chips {...sortChips} className={styles['select-input-container']} />
                         </div>
-                        :
-                        <div ref={scrollContainerRef} className={classnames(styles['meta-items-container'], 'animation-fade-in')} onScroll={onScroll}>
-                            {
-                                displayCatalog.map((libItem, index) => (
-                                    <LibItem
-                                        {...libItem}
-                                        key={libItem.id || index}
-                                        notifications={notifications}
-                                        removable={model === 'library'}
-                                        detailsVideosFirst={model === 'library'}
-                                    />
-                                ))
-                            }
-                        </div>
-                }
-            </div>
+                        {
+                            library.selected === null ?
+                                <DelayedRenderer delay={500}>
+                                    <div className={styles['message-container']}>
+                                        <Image
+                                            className={styles['image']}
+                                            src={require('/assets/images/empty.png')}
+                                            alt={' '}
+                                        />
+                                        <div className={styles['message-label']}>{model === 'library' ? t('LIBRARY_NOT_LOADED') : t('BOARD_CONTINUE_WATCHING_NOT_LOADED')}</div>
+                                    </div>
+                                </DelayedRenderer>
+                                :
+                                library.catalog.length === 0 ?
+                                    <div className={styles['message-container']}>
+                                        <Image
+                                            className={styles['image']}
+                                            src={require('/assets/images/empty.png')}
+                                            alt={' '}
+                                        />
+                                        <div className={styles['message-label']}>{model === 'library' ? t('LIBRARY_EMPTY') : t('BOARD_CONTINUE_WATCHING_EMPTY')}</div>
+                                    </div>
+                                    :
+                                    <div ref={scrollContainerRef} className={classnames(styles['meta-items-container'], 'animation-fade-in')} onScroll={onScroll}>
+                                        {
+                                            library.catalog.map((libItem, index) => (
+                                                <LibItem
+                                                    {...libItem}
+                                                    key={index}
+                                                    notifications={notifications}
+                                                    removable={model === 'library'}
+                                                    detailsVideosFirst={model === 'library'}
+                                                />
+                                            ))
+                                        }
+                                    </div>
+                        }
+                    </div>
+                    :
+                    <Placeholder />
+            }
         </MainNavBars>
     );
 };
