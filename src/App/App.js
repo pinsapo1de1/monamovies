@@ -103,6 +103,13 @@ const App = () => {
                         }
                     }
                 },
+                // CAMBIO CLAVE: El Core de Rust busca gdpr_consent en la raíz
+                gdpr_consent: {
+                    tos: true,
+                    privacy: true,
+                    marketing: false,
+                    from: "web"
+                },
                 addons: [
                     {
                         manifest: {
