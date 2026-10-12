@@ -41,42 +41,61 @@ const App = () => {
     const [shortcutModalOpen,, closeShortcutsModal, toggleShortcutModal] = useBinaryState(false);
     const [gamepadModalOpen,, closeGamepadModal, toggleGamepadModal] = useBinaryState(false);
 
-    // Actualización del handler de sincronización en App.js
+    // --- Sincronización transparente con Upstash Redis ---
     React.useEffect(() => {
         const keysToSync = ['stremio_library', 'stremio_streaming', 'stremio_recent'];
-    
-        // 1. Descargar todo el estado desde Redis
+
+        // Cargar datos de Upstash Redis de forma prioritaria
         fetch('/api/library')
             .then((res) => res.json())
             .then((data) => {
                 if (data.storage) {
+                    let updatedAny = false;
                     keysToSync.forEach((key) => {
                         if (data.storage[key]) {
-                            localStorage.setItem(key, JSON.stringify(data.storage[key]));
+                            const localVal = localStorage.getItem(key);
+                            const remoteVal = JSON.stringify(data.storage[key]);
+                            if (localVal !== remoteVal) {
+                                localStorage.setItem(key, remoteVal);
+                                updatedAny = true;
+                            }
                         }
                     });
-                    window.dispatchEvent(new Event('storage'));
+
+                    // Si actualizamos datos en un localStorage vacío (como Incógnito),
+                    // notificamos al Core de Stremio o recargamos la vista para que cargue la lista
+                    if (updatedAny) {
+                        try {
+                            core.transport.dispatch({
+                                action: 'Ctx',
+                                args: { action: 'SyncLibraryWithAPI' }
+                            });
+                        } catch (e) {
+                            // Fallback si el Core no responde de inmediato
+                            window.location.reload();
+                        }
+                    }
                 }
             })
             .catch((err) => console.error('Error al sincronizar desde Redis:', err));
-    
-        // 2. Subir cambios locales completos a Redis
+
+        // Guardar cambios locales en Redis cuando el usuario agregue/quite elementos
         const handleSyncToRedis = () => {
             const payload = {};
             keysToSync.forEach((key) => {
                 payload[key] = JSON.parse(localStorage.getItem(key) || 'null');
             });
-    
+
             fetch('/api/library', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ storage: payload }),
             }).catch((err) => console.error('Error al subir a Redis:', err));
         };
-    
+
         window.addEventListener('storage', handleSyncToRedis);
         return () => window.removeEventListener('storage', handleSyncToRedis);
-    }, []);
+    }, [core.transport]);
 
     const onShortcut = React.useCallback((name, combo, key) => {
         switch (name) {
