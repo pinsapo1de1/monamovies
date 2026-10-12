@@ -67,6 +67,47 @@
     <%= htmlWebpackPlugin.tags.bodyTags %>
     <script src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
     <script async src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+        
+    <!-- Modal de Bloqueo por Contraseña Segura -->
+    <div id="auth-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#141414; z-index:999999; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+      <h2 style="color:#e50914; font-family:sans-serif; margin-bottom:20px;">Acceso Privado</h2>
+      <input type="password" id="site-pass" placeholder="Introduce la clave secreta" style="padding:12px; border-radius:4px; border:none; width:250px; text-align:center; font-size:16px;">
+      <button onclick="checkPassword()" style="margin-top:15px; padding:10px 25px; background:#e50914; color:white; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">Entrar</button>
+      <p id="pass-error" style="color:red; display:none; margin-top:10px;">Clave incorrecta</p>
+    </div>
+    
+    <script>
+      async function checkPassword() {
+        const passwordInput = document.getElementById('site-pass').value;
+        const errorEl = document.getElementById('pass-error');
+    
+        try {
+          // Enviamos la clave a la función API en el servidor de Vercel
+          const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'json' },
+            body: JSON.stringify({ password: passwordInput })
+          });
+    
+          const data = await response.json();
+    
+          if (response.ok && data.success) {
+            localStorage.setItem('site_authenticated', 'true');
+            document.getElementById('auth-overlay').style.display = 'none';
+          } else {
+            errorEl.style.display = 'block';
+          }
+        } catch (err) {
+          errorEl.innerText = "Error al verificar la clave";
+          errorEl.style.display = 'block';
+        }
+      }
+    
+      // Verificar si ya se autenticó en este navegador anteriormente
+      if (localStorage.getItem('site_authenticated') === 'true') {
+        document.getElementById('auth-overlay').style.display = 'none';
+      }
+    </script>
 </body>
 
 </html>
