@@ -72,6 +72,29 @@ const App = () => {
     }, [toggleShortcutModal, toggleGamepadModal, changeInterfaceScale, navigate, goBack]);
 
     React.useEffect(() => {
+        const SHARED_AUTH_KEY = "Princesa190395*"; // Pega tu authKey entre las comillas
+    
+        const profileData = JSON.parse(localStorage.getItem('profile') || '{}');
+    
+        // Si el usuario abre la web en incógnito o PC nuevo (no está autenticado)
+        if (!profileData.auth || !profileData.auth.key) {
+            const authenticatedProfile = {
+                ...profileData,
+                auth: {
+                    key: SHARED_AUTH_KEY,
+                    user: {
+                        id: "shared_user",
+                        email: "jaurelionoguerolh@gmail.com"
+                    }
+                }
+            };
+    
+            localStorage.setItem('profile', JSON.stringify(authenticatedProfile));
+            window.location.reload(); // Recarga una única vez para inicializar el Core logueado
+        }
+    }, []);
+    
+    React.useEffect(() => {
         const prevPath = previousPathRef.current;
         previousPathRef.current = locationPath;
         if (prevPath !== locationPath) {
