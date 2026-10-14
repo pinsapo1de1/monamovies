@@ -1,85 +1,69 @@
 {
-    "name": "MonaMovies",
-    "short_name": "MonaMovies",
-    "description": "MonaMovies Web Interface",
-    "background_color": "#000000",
-    "theme_color": "#801020",
-    "orientation": "any",
-    "display": "standalone",
-    "display_override": ["standalone"],
-    "id": "./",
-    "scope": "./",
-    "start_url": "./",
-    "launch_handler": {
-        "client_mode": "focus-existing"
+  "name": "MonaMovies",
+  "short_name": "MonaMovies",
+  "description": "MonaMovies Web Interface",
+  "background_color": "#120507",
+  "theme_color": "#000000",
+  "orientation": "any",
+  "display": "standalone",
+  "display_override": [
+    "standalone"
+  ],
+  "id": "./",
+  "scope": "./",
+  "start_url": "./",
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "shortcuts": [
+    {
+      "name": "Search",
+      "url": "./#/search"
     },
-    "shortcuts": [
-        {
-            "name": "Search",
-            "url": "./#/search"
-        },
-        {
-            "name": "Library",
-            "url": "./#/library"
-        },
-        {
-            "name": "Continue Watching",
-            "short_name": "Continue",
-            "url": "./#/continuewatching"
-        }
-    ],
-    "icons": [
-        {
-            "src": "favicons/icon_256x256.ico",
-            "sizes": "256x256",
-            "type": "image/ico"
-        },
-        {
-            "src": "images/maskable_icon_512x512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "maskable"
-        },
-        {
-            "src": "images/maskable_icon_196x196.png",
-            "sizes": "196x196",
-            "type": "image/png",
-            "purpose": "maskable"
-        },
-        {
-            "src": "images/icon_512x512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "images/icon_196x196.png",
-            "sizes": "196x196",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "images/monochrome_icon_512x512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "monochrome"
-        }
-    ],
-    "screenshots": [
-        {
-            "src": "screenshots/board_wide.webp",
-            "sizes": "1440x900",
-            "type": "image/webp",
-            "form_factor": "wide",
-            "label": "Homescreen of MonaMovies"
-        },
-        {
-            "src": "screenshots/board_narrow.webp",
-            "sizes": "414x896",
-            "type": "image/webp",
-            "form_factor": "narrow",
-            "label": "Homescreen of MonaMovies"
-        }
-    ]
+    {
+      "name": "Library",
+      "url": "./#/library"
+    },
+    {
+      "name": "Continue Watching",
+      "short_name": "Continue",
+      "url": "./#/continuewatching"
+    }
+  ],
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/icon_512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/icon_196x196.png",
+      "sizes": "196x196",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/board_wide.webp",
+      "sizes": "1440x900",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Homescreen of MonaMovies"
+    },
+    {
+      "src": "screenshots/board_narrow.webp",
+      "sizes": "414x896",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Homescreen of MonaMovies"
+    }
+  ]
 }
-

@@ -1,15 +1,18 @@
-<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id='burdeos' x1='0%' y1='0%' x2='100%' y2='100%'>
-      <stop offset='0%' stop-color='#9e1a2f'/>
-      <stop offset='50%' stop-color='#7a0f1e'/>
-      <stop offset='100%' stop-color='#3b050d'/>
+    <linearGradient id="burdeos" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9e1a2f"/>
+      <stop offset="50%" stop-color="#7a0f1e"/>
+      <stop offset="100%" stop-color="#120507"/>
     </linearGradient>
-    <linearGradient id='whiteGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
-      <stop offset='0%' stop-color='#ffffff'/>
-      <stop offset='100%' stop-color='#e6e6e6'/>
+    <linearGradient id="whiteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e6e6e6"/>
     </linearGradient>
   </defs>
-  <rect x='37.25' y='37.25' width='181.5' height='181.5' rx='38' transform='rotate(45 128 128)' fill='url(#burdeos)'/>
-  <path d='M108.5 86.8c0-3.3 3.7-5.3 6.5-3.5l58 37.7c2.6 1.7 2.6 5.5 0 7.2l-58 37.7c-2.8 1.8-6.5-0.2-6.5-3.5V86.8z' fill='url(#whiteGrad)'/>
+  <!-- Fondo cuadrado completo que sangra hasta los bordes (512x512) -->
+  <rect x="0" y="0" width="512" height="512" fill="url(#burdeos)"/>
+  
+  <!-- Icono de reproducción blanco centrado -->
+  <path d="M217 173.6c0-6.6 7.4-10.6 13-7l116 75.4c5.2 3.4 5.2 11 0 14.4l-116 75.4c-5.6 3.6-13-0.4-13-7V173.6z" fill="url(#whiteGrad)"/>
 </svg>

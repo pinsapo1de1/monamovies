@@ -38,23 +38,25 @@
                 align-items: center;
                 padding: 0 1rem;
 
+                /* Ocultar el texto base sin destruir la alineación ni el pseudoelemento */
                 .search-hints-title {
-                    flex-grow: 0;
-                    flex-shrink: 1.6;
-                    flex-basis: auto;
-                    font-size: 1rem;
-                    color: @color-surface-light5-90;
-                    text-align: center;
-                    opacity: 0.4;
+                    font-size: 0 !important;
+                    line-height: 0 !important;
+                    visibility: hidden !important; /* Desactiva la renderización del texto nativo */
+                    margin: 0 !important;
+                    padding: 0 !important;
                 }
 
-                /* Texto "MonaMovies" (Inyectado dinámicamente en ::after) */
+                /* Texto "MonaMovies" (Inyectado en ::after) perfectamente alineado y visible */
                 &::after {
-                    font-size: 2rem;
+                    content: "MonaMovies" !important;
+                    display: block !important;
+                    visibility: visible !important;
+                    font-size: 3rem;
                     font-weight: bold;
                     color: @color-surface-light5-90;
                     opacity: 0.9;
-                    margin-left: 0.5rem;
+                    text-align: center;
                 }
             }
     
