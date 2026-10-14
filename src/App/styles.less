@@ -599,8 +599,8 @@ div[class*="search-bar-"] input {
         position: relative !important;
         flex-direction: column !important;
         height: auto !important;
-        padding: 1rem 1rem !important;
-        gap: 1rem !important;
+        padding: 0.6rem 1rem !important;
+        gap: 0.6rem !important;
 
         /* Logo centrado en la primera fila */
         a[class*="logo-"],
@@ -626,11 +626,9 @@ div[class*="search-bar-"] input {
         }
     }
 
-    /* Reset del contenedor principal para eliminar huecos sobrantes */
-    div[class*="route-"],
-    div[class*="main-container-"],
-    div[class*="page-container-"] {
-        padding-top: 0 !important;
-        margin-top: 0 !important;
+    /* 2. Padding-top en el contenedor principal para dar espacio exacto */
+    div[class*="nav-content-container-"],
+    div[class*="main-nav-bars-container-"] {
+        padding-top: 5rem !important; /* Desplaza el contenido exactamente debajo de la barra de búsqueda */
     }
 }
