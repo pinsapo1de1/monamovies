@@ -596,11 +596,12 @@ div[class*="search-bar-"] input {
 @media (max-width: 768px) {
     /* Ajuste de la barra superior en móvil */
     nav[class*="horizontal-nav-bar-"] {
-        position: relative !important; /* Pasa de fixed a relative para empujar el contenido de forma natural */
+        position: relative !important;
         flex-direction: column !important;
         height: auto !important;
-        padding: 0.6rem 1rem !important;
-        gap: 0.6rem !important;
+        padding: 0.8rem 1rem !important;
+        gap: 0.8rem !important;
+        margin-bottom: 1.2rem !important; /* Añade separación real con el contenido */
 
         /* Logo centrado en la primera fila */
         a[class*="logo-"],
@@ -632,5 +633,32 @@ div[class*="search-bar-"] input {
     div[class*="page-container-"] {
         padding-top: 0 !important;
         margin-top: 0 !important;
+    }
+
+    /* Reducir el título gigante "MonaMovies" dentro de Search */
+    div[class*="search-"] h1,
+    div[class*="search-"] h2,
+    div[class*="title-"] {
+        font-size: 1.5rem !important;
+        line-height: 1.2 !important;
+        letter-spacing: -0.5px !important;
+    }
+
+    /* Reducir el contenedor de ayuda/iconos de la pantalla Search */
+    div[class*="search-container-"],
+    div[class*="search-info-"] {
+        padding: 0.5rem !important;
+        gap: 0.5rem !important;
+
+        /* Iconos de categorías más pequeños */
+        svg, img {
+            width: 1.6rem !important;
+            height: 1.6rem !important;
+        }
+
+        /* Texto explicativo inferior */
+        p, span {
+            font-size: 0.8rem !important;
+        }
     }
 }
