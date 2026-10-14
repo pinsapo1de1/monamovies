@@ -731,3 +731,13 @@ div[class*="search-bar-"] input {
         }
     }
 }
+
+/* Ocultar el aviso "Streaming server is not available" */
+div[class*="board-warning-container-"],
+div[class*="warning-container-"] {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
