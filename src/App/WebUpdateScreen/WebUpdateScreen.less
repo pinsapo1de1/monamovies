@@ -65,6 +65,7 @@
         }
     }
 
+    /* Logo personalizado de MonaMovies (rombo burdeos con reproductor blanco) */
     .logo {
         flex: none;
         width: 8rem;
@@ -72,17 +73,30 @@
         object-fit: contain;
         object-position: center;
         animation: 1s linear infinite alternate pulse;
+        
+        /* Reemplazar la imagen morada original por el icono SVG vectorial */
+        content: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'><defs><linearGradient id='burdeos' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%239e1a2f'/><stop offset='50%' stop-color='%237a0f1e'/><stop offset='100%' stop-color='%233b050d'/></linearGradient><linearGradient id='whiteGrad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%23ffffff'/><stop offset='100%' stop-color='%23e6e6e6'/></linearGradient></defs><rect x='37.25' y='37.25' width='181.5' height='181.5' rx='38' transform='rotate(45 128 128)' fill='url(%23burdeos)'/><path d='M108.5 86.8c0-3.3 3.7-5.3 6.5-3.5l58 37.7c2.6 1.7 2.6 5.5 0 7.2l-58 37.7c-2.8 1.8-6.5-0.2-6.5-3.5V86.8z' fill='url(%23whiteGrad)'/></svg>") !important;
     }
 
+    /* Título con el texto cambiado a MonaMovies */
     .title {
         max-width: 42rem;
         margin-top: 0.5rem;
-        font-size: 1.875rem;
+        font-size: 0 !important; /* Oculta el texto nativo original */
         font-weight: 500;
         line-height: 1.25;
         color: var(--primary-foreground-color);
         overflow-wrap: anywhere;
-    }
+
+        /* Inyección del nuevo texto mediante pseudoelemento */
+        &::before {
+            content: "A new version of MonaMovies is available" !important;
+            font-size: 1.875rem !important;
+            font-weight: 600 !important;
+            color: var(--primary-foreground-color) !important;
+            display: block !important;
+        }
+    }    
 
     .progress {
         position: relative;
