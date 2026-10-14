@@ -592,3 +592,36 @@ div[class*="search-bar-"] input {
         border-radius: 2rem !important;
     }
 }
+
+/* Ajustes específicos para pantallas móviles (máximo 768px) */
+@media (max-width: 768px) {
+    nav[class*="horizontal-nav-bar-"] {
+        flex-direction: column !important;
+        height: auto !important;
+        padding: 0.8rem 1rem !important;
+        gap: 0.8rem !important;
+
+        /* Logo centrado en la primera fila */
+        a[class*="logo-"],
+        div[class*="logo-"] {
+            order: 1 !important;
+            margin: 0 auto !important;
+            justify-content: center !important;
+        }
+
+        /* Barra de búsqueda relativa en la segunda fila */
+        div[class*="search-bar-"] {
+            order: 2 !important;
+            position: relative !important;
+            left: 0 !important;
+            transform: none !important;
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        /* Controles a la derecha o tercera fila si existen */
+        div[class*="buttons-container-"] {
+            order: 3 !important;
+        }
+    }
+}
