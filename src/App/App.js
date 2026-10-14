@@ -182,7 +182,7 @@ const App = () => {
                                     <SearchParamsHandler />
                                     <DeepLinkHandler />
                                     <ShellOpenHandler />
-                                    <UpdaterBanner className={styles['updater-banner-container']} />
+                                    {/*<UpdaterBanner className={styles['updater-banner-container']} />*/}
                                     <ProtectedRoutes />
                                 </DiscordProvider>
                             </FullscreenProvider>
