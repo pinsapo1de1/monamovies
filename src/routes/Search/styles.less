@@ -42,7 +42,7 @@
                     flex-grow: 0;
                     flex-shrink: 1;
                     flex-basis: auto;
-                    font-size: 1.2rem;
+                    font-size: 1rem;
                     color: @color-surface-light5-90;
                     text-align: center;
                     opacity: 0.4;
@@ -135,39 +135,12 @@
     }
 }
 
-/* --- AJUSTES DE TAMAÑO PARA MÓVIL --- */
 @media only screen and (max-width: @small) {
     .search-container {
         .search-content {
             .search-hints-wrapper {
-                .search-hints-title-container {
-                    padding: 0 0.5rem;
-                    
-                    .search-hints-title {
-                        font-size: 1.3rem; // Reducimos el tamaño del título principal en móvil
-                        opacity: 0.7;
-                    }
-                }
-
                 .search-hints-container {
-                    max-width: 100%;
-                    padding: 1.5rem 0.5rem; // Reducimos los paddings gigantes de 4rem
-
-                    .search-hint-container {
-                        flex: 0 0 50%; // Disposición limpia de 2 en 2 en móvil
-                        margin-bottom: 2rem;
-                        padding: 0 0.5rem;
-
-                        .icon {
-                            width: 2.2rem; // Reducimos el icono gigante de 4rem a 2.2rem
-                            height: 2.2rem;
-                            margin-bottom: 0.8rem;
-                        }
-
-                        .label {
-                            font-size: 0.9rem; // Ajustamos la tipografía del texto
-                        }
-                    }
+                    max-width: 90%;
                 }
             }
         }
@@ -213,13 +186,13 @@
             }
 
             .search-hints-wrapper {
-                margin-top: 1rem;
+                margin-top: 4rem;
 
                 .search-hints-container {
-                    padding: 1rem;
+                    padding: 4rem 2rem;
 
                     .search-hint-container {
-                        padding: 0 0.5rem;
+                        padding: 0 1.5rem;
                     }
                 }
             }

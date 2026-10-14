@@ -594,9 +594,13 @@ div[class*="search-bar-"] input {
 }
 
 @media (max-width: 768px) {
-    /* Ajuste de la barra superior en móvil */
+    /* 1. Header fijo en 2 filas en móvil */
     nav[class*="horizontal-nav-bar-"] {
-        position: relative !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        z-index: 1000 !important;
         flex-direction: column !important;
         height: auto !important;
         padding: 0.6rem 1rem !important;
@@ -620,15 +624,15 @@ div[class*="search-bar-"] input {
             max-width: 100% !important;
         }
 
-        /* Ocultar botones laterales no esenciales en móvil si estorban */
         div[class*="buttons-container-"] {
             display: none !important;
         }
     }
 
-    /* 2. Padding-top en el contenedor principal para dar espacio exacto */
+    /* 2. Desplazar todo el contenido de las rutas hacia abajo para no ser tapado por el header de 2 filas */
+    div[class*="route-content"],
     div[class*="nav-content-container-"],
-    div[class*="main-nav-bars-container-"] {
-        padding-top: 5rem !important; /* Desplaza el contenido exactamente debajo de la barra de búsqueda */
+    div[class*="main-container-"] {
+        margin-top: 6.5rem !important; /* Espacio exacto para liberar la barra de búsqueda */
     }
 }
