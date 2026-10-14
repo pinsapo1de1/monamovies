@@ -34,36 +34,6 @@
             "type": "image/svg+xml",
             "sizes": "any",
             "purpose": "any maskable"
-        },
-        {
-            "src": "images/maskable_icon_512x512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "maskable"
-        },
-        {
-            "src": "images/maskable_icon_196x196.png",
-            "sizes": "196x196",
-            "type": "image/png",
-            "purpose": "maskable"
-        },
-        {
-            "src": "images/icon_512x512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "images/icon_196x196.png",
-            "sizes": "196x196",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "images/monochrome_icon_512x512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "monochrome"
         }
     ],
     "screenshots": [
@@ -72,14 +42,14 @@
             "sizes": "1440x900",
             "type": "image/webp",
             "form_factor": "wide",
-            "label": "Homescreen of Stremio"
+            "label": "Homescreen of MonaMovies"
         },
         {
             "src": "screenshots/board_narrow.webp",
             "sizes": "414x896",
             "type": "image/webp",
             "form_factor": "narrow",
-            "label": "Homescreen of Stremio"
+            "label": "Homescreen of Monamovies"
         }
     ]
 }
