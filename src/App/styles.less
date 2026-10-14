@@ -593,13 +593,14 @@ div[class*="search-bar-"] input {
     }
 }
 
-/* Ajustes específicos para pantallas móviles (máximo 768px) */
 @media (max-width: 768px) {
+    /* Ajuste de la barra superior en móvil */
     nav[class*="horizontal-nav-bar-"] {
+        position: relative !important; /* Pasa de fixed a relative para empujar el contenido de forma natural */
         flex-direction: column !important;
         height: auto !important;
-        padding: 0.8rem 1rem !important;
-        gap: 0.8rem !important;
+        padding: 0.6rem 1rem !important;
+        gap: 0.6rem !important;
 
         /* Logo centrado en la primera fila */
         a[class*="logo-"],
@@ -609,7 +610,7 @@ div[class*="search-bar-"] input {
             justify-content: center !important;
         }
 
-        /* Barra de búsqueda relativa en la segunda fila */
+        /* Barra de búsqueda en la segunda fila */
         div[class*="search-bar-"] {
             order: 2 !important;
             position: relative !important;
@@ -619,62 +620,17 @@ div[class*="search-bar-"] input {
             max-width: 100% !important;
         }
 
-        /* Controles a la derecha o tercera fila si existen */
+        /* Ocultar botones laterales no esenciales en móvil si estorban */
         div[class*="buttons-container-"] {
-            order: 3 !important;
+            display: none !important;
         }
     }
-}
 
-/* =========================================================
-   1. OCULTAR ICONO DE PERFIL GLOBALMENTE (DESKTOP Y MÓVIL)
-   ========================================================= */
-div[class*="user-profile-"],
-div[class*="profile-"],
-a[href*="#/settings"],
-div[class*="nav-button-"][class*="user-"],
-div[class*="horizontal-nav-bar-"] div[class*="user-"] {
-    display: none !important;
-}
-
-
-/* =========================================================
-   2. AJUSTES EXCLUSIVOS DE MÓVIL (HASTA 768px)
-   ========================================================= */
-@media (max-width: 768px) {
-
-    /* Evitar que el header de doble fila tape el contenido superior */
+    /* Reset del contenedor principal para eliminar huecos sobrantes */
     div[class*="route-"],
     div[class*="main-container-"],
-    div[class*="page-container-"],
-    div[class*="board-"],
-    div[class*="search-"] {
-        padding-top: 0.5rem !important;
-    }
-
-    /* Reducir el tamaño de la tipografía gigante en la pantalla Search */
-    div[class*="search-"] {
-        
-        /* Título gigante MonaMovies en el body de Search */
-        h1, h2, div[class*="title-"], span[class*="title-"] {
-            font-size: 1.8rem !important;
-            line-height: 1.2 !important;
-            word-break: break-word !important;
-        }
-
-        /* Rejilla/Iconos informativos dentro de Search */
-        div[class*="search-info-"],
-        div[class*="container-"] {
-            padding: 0.5rem !important;
-            
-            svg, img {
-                width: 2rem !important;
-                height: 2rem !important;
-            }
-
-            p, span {
-                font-size: 0.85rem !important;
-            }
-        }
+    div[class*="page-container-"] {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
     }
 }
