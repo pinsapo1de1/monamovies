@@ -593,46 +593,71 @@ div[class*="search-bar-"] input {
     }
 }
 
+/* Header minimalista de una sola fila en móvil */
 @media (max-width: 768px) {
-    /* 1. Header fijo en 2 filas en móvil */
+
+    /* 1. Barra de navegación fija de 1 fila */
     nav[class*="horizontal-nav-bar-"] {
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         width: 100% !important;
+        height: 3.5rem !important;
+        padding: 0 1rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
         z-index: 1000 !important;
-        flex-direction: column !important;
-        height: auto !important;
-        padding: 0.6rem 1rem !important;
-        gap: 0.6rem !important;
 
-        /* Logo centrado en la primera fila */
+        /* A. Logo + Nombre "MonaMovies" centrado */
         a[class*="logo-"],
         div[class*="logo-"] {
-            order: 1 !important;
-            margin: 0 auto !important;
+            position: absolute !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            margin: 0 !important;
             justify-content: center !important;
         }
 
-        /* Barra de búsqueda en la segunda fila */
+        /* B. Transformar la barra de búsqueda en el botón de Lupa a la derecha */
         div[class*="search-bar-"] {
-            order: 2 !important;
-            position: relative !important;
-            left: 0 !important;
-            transform: none !important;
-            width: 100% !important;
-            max-width: 100% !important;
+            position: absolute !important;
+            right: 1rem !important;
+            left: auto !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            width: 2.2rem !important;
+            height: 2.2rem !important;
+            max-width: 2.2rem !important;
+            border-radius: 50% !important;
+            overflow: hidden !important;
+            background: transparent !important;
+            box-shadow: none !important;
+
+            /* Mantiene el input transparente para que al pulsar navegue/abra la búsqueda */
+            input {
+                opacity: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                cursor: pointer !important;
+                padding: 0 !important;
+            }
+
+            /* Icono de la lupa centrado en el botón */
+            svg, div[class*="icon-"] {
+                position: absolute !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                pointer-events: none !important;
+                width: 1.4rem !important;
+                height: 1.4rem !important;
+            }
         }
 
+        /* C. Ocultar botones laterales sobrantes */
         div[class*="buttons-container-"] {
             display: none !important;
         }
-    }
-
-    /* 2. Desplazar todo el contenido de las rutas hacia abajo para no ser tapado por el header de 2 filas */
-    div[class*="route-content"],
-    div[class*="nav-content-container-"],
-    div[class*="main-container-"] {
-        margin-top: 6.5rem !important; /* Espacio exacto para liberar la barra de búsqueda */
     }
 }
