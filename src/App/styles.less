@@ -593,48 +593,65 @@ div[class*="search-bar-"] input {
     }
 }
 
-/* Header minimalista de una sola fila en móvil */
+/* Header minimalista de una sola fila adaptado a móvil */
 @media (max-width: 768px) {
 
-    /* 1. Barra de navegación fija de 1 fila */
+    /* 1. Ajuste del contenedor de la barra superior */
     nav[class*="horizontal-nav-bar-"] {
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
-        width: 100% !important;
-        height: 3.5rem !important;
-        padding: 0 1rem !important;
+        right: 0 !important;
+        width: 100vw !important;
+        max-width: 100% !important;
+        height: 4.2rem !important; /* Altura sutilmente mayor para dar aire arriba/abajo */
+        padding: 0 1.2rem !important;
         display: flex !important;
         align-items: center !important;
-        justify-content: center !important;
+        justify-content: space-between !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important; /* Evita que cualquier elemento genere scroll horizontal */
         z-index: 1000 !important;
 
-        /* A. Logo + Nombre "MonaMovies" centrado */
+        /* A. Logo + Título centrado con mayor tamaño */
         a[class*="logo-"],
         div[class*="logo-"] {
             position: absolute !important;
             left: 50% !important;
             transform: translateX(-50%) !important;
             margin: 0 !important;
-            justify-content: center !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.7rem !important;
+
+            /* Icono SVG ligeramente más grande */
+            &::before {
+                width: 2.5rem !important;
+                height: 2.5rem !important;
+                min-width: 2.5rem !important;
+            }
+
+            /* Texto MonaMovies ligeramente más grande */
+            &::after {
+                font-size: 1.6rem !important;
+                font-weight: 800 !important;
+            }
         }
 
-        /* B. Transformar la barra de búsqueda en el botón de Lupa a la derecha */
+        /* B. Botón/Lupa alineado dentro del margen derecho visible */
         div[class*="search-bar-"] {
             position: absolute !important;
-            right: 1rem !important;
+            right: 1.2rem !important;
             left: auto !important;
             top: 50% !important;
             transform: translateY(-50%) !important;
-            width: 2.2rem !important;
-            height: 2.2rem !important;
-            max-width: 2.2rem !important;
+            width: 2.4rem !important;
+            height: 2.4rem !important;
+            max-width: 2.4rem !important;
             border-radius: 50% !important;
-            overflow: hidden !important;
             background: transparent !important;
             box-shadow: none !important;
 
-            /* Mantiene el input transparente para que al pulsar navegue/abra la búsqueda */
             input {
                 opacity: 0 !important;
                 width: 100% !important;
@@ -643,19 +660,18 @@ div[class*="search-bar-"] input {
                 padding: 0 !important;
             }
 
-            /* Icono de la lupa centrado en el botón */
             svg, div[class*="icon-"] {
                 position: absolute !important;
                 top: 50% !important;
                 left: 50% !important;
                 transform: translate(-50%, -50%) !important;
                 pointer-events: none !important;
-                width: 1.4rem !important;
-                height: 1.4rem !important;
+                width: 1.5rem !important;
+                height: 1.5rem !important;
             }
         }
 
-        /* C. Ocultar botones laterales sobrantes */
+        /* C. Ocultar contenedores secundarios */
         div[class*="buttons-container-"] {
             display: none !important;
         }

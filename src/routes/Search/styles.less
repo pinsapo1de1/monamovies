@@ -40,12 +40,21 @@
 
                 .search-hints-title {
                     flex-grow: 0;
-                    flex-shrink: 1;
+                    flex-shrink: 1.6;
                     flex-basis: auto;
                     font-size: 1rem;
                     color: @color-surface-light5-90;
                     text-align: center;
                     opacity: 0.4;
+                }
+
+                /* Texto "MonaMovies" (Inyectado dinámicamente en ::after) */
+                &::after {
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: @color-surface-light5-90;
+                    opacity: 0.9;
+                    margin-left: 0.5rem;
                 }
             }
     
