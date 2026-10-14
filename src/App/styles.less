@@ -625,3 +625,56 @@ div[class*="search-bar-"] input {
         }
     }
 }
+
+/* =========================================================
+   1. OCULTAR ICONO DE PERFIL GLOBALMENTE (DESKTOP Y MÓVIL)
+   ========================================================= */
+div[class*="user-profile-"],
+div[class*="profile-"],
+a[href*="#/settings"],
+div[class*="nav-button-"][class*="user-"],
+div[class*="horizontal-nav-bar-"] div[class*="user-"] {
+    display: none !important;
+}
+
+
+/* =========================================================
+   2. AJUSTES EXCLUSIVOS DE MÓVIL (HASTA 768px)
+   ========================================================= */
+@media (max-width: 768px) {
+
+    /* Evitar que el header de doble fila tape el contenido superior */
+    div[class*="route-"],
+    div[class*="main-container-"],
+    div[class*="page-container-"],
+    div[class*="board-"],
+    div[class*="search-"] {
+        padding-top: 0.5rem !important;
+    }
+
+    /* Reducir el tamaño de la tipografía gigante en la pantalla Search */
+    div[class*="search-"] {
+        
+        /* Título gigante MonaMovies en el body de Search */
+        h1, h2, div[class*="title-"], span[class*="title-"] {
+            font-size: 1.8rem !important;
+            line-height: 1.2 !important;
+            word-break: break-word !important;
+        }
+
+        /* Rejilla/Iconos informativos dentro de Search */
+        div[class*="search-info-"],
+        div[class*="container-"] {
+            padding: 0.5rem !important;
+            
+            svg, img {
+                width: 2rem !important;
+                height: 2rem !important;
+            }
+
+            p, span {
+                font-size: 0.85rem !important;
+            }
+        }
+    }
+}
