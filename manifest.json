@@ -30,10 +30,39 @@
     ],
     "icons": [
         {
-            "src": "icon.svg",
-            "type": "image/svg+xml",
-            "sizes": "any",
-            "purpose": "any maskable"
+            "src": "favicons/icon_256x256.ico",
+            "sizes": "256x256",
+            "type": "image/ico"
+        },
+        {
+            "src": "images/maskable_icon_512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "images/maskable_icon_196x196.png",
+            "sizes": "196x196",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "images/icon_512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "images/icon_196x196.png",
+            "sizes": "196x196",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "images/monochrome_icon_512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "monochrome"
         }
     ],
     "screenshots": [
@@ -49,7 +78,7 @@
             "sizes": "414x896",
             "type": "image/webp",
             "form_factor": "narrow",
-            "label": "Homescreen of Monamovies"
+            "label": "Homescreen of MonaMovies"
         }
     ]
 }
